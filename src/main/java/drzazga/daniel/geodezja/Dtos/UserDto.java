@@ -1,12 +1,26 @@
 package drzazga.daniel.geodezja.Dtos;
 
+import drzazga.daniel.geodezja.annotations.CorrectUserEmail;
+import drzazga.daniel.geodezja.annotations.UniqueUserEmail;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 public class UserDto {
+
     private Long id;
+
+    @UniqueUserEmail
+    @CorrectUserEmail
+    @NotBlank(message = "{error.userEmail.empty}")
     private String email;
+
     private String password;
+
+    @NotBlank(message = "{error.userName.empty}")
     private String firstName;
+
+    @NotBlank(message = "{error.userLastName.empty}")
     private String lastName;
     private Integer active;
     private Set<RoleDto> rolesDto;
