@@ -10,17 +10,17 @@ public class UserRegistrationDto {
 
     @UniqueUserEmail
     @CorrectUserEmail
-    @NotBlank(message = "error.userEmail.empty")
+    @NotBlank(message = "{error.userEmail.empty}")
     private String email;
 
     @CorrectUserPassword
-    @NotBlank(message = "error.userPassword.empty")
+    @NotBlank(message = "{error.userPassword.empty}")
     private String password;
 
-    @NotBlank(message = "error.userName.empty")
+    @NotBlank(message = "{error.userName.empty}")
     private String firstName;
 
-    @NotBlank(message = "error.userLastName.empty")
+    @NotBlank(message = "{error.userLastName.empty}")
     private String lastName;
 
     public UserRegistrationDto() {
