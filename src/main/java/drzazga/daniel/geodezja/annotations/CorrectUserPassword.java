@@ -10,11 +10,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Constraint(validatedBy = CorrectUserPasswordValidator.class)
-@Target(ElementType.FIELD)
+@Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CorrectUserPassword {
 
-    String message() default "error.userPasswordIsNotMatch";
+    String message() default "{error.userPasswordIsNotMatch}";
 
     Class<?>[] groups() default {};
 

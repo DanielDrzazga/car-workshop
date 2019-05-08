@@ -10,11 +10,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Constraint(validatedBy = CorrectUserEmailValidator.class)
-@Target(ElementType.FIELD)
+@Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CorrectUserEmail {
 
-    String message() default "error.userEmailIsNotMatch";
+    String message() default "{error.userEmailIsNotMatch}";
 
     Class<?>[] groups() default {};
 

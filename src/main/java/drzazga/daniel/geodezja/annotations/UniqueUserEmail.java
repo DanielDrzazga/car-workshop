@@ -10,11 +10,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Constraint(validatedBy = UniqueUserEmailValidator.class)
-@Target(ElementType.FIELD)
+@Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueUserEmail {
 
-    String message() default "error.UserEmailIsNotUnique";
+    String message() default "{error.userEmailExist}";
 
     Class<?>[] groups() default {};
 

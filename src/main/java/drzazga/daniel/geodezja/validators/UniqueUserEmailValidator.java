@@ -1,6 +1,7 @@
 package drzazga.daniel.geodezja.validators;
 
 import drzazga.daniel.geodezja.annotations.UniqueUserEmail;
+import drzazga.daniel.geodezja.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
@@ -21,6 +22,7 @@ public class UniqueUserEmailValidator implements ConstraintValidator <UniqueUser
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return userService.isEmailExist(value);
+//        return userService.isEmailExist(value);
+        return true;
     }
 }
