@@ -1,6 +1,7 @@
 package drzazga.daniel.geodezja.services.impl;
 
 import drzazga.daniel.geodezja.Dtos.UserDto;
+import drzazga.daniel.geodezja.Dtos.UserPasswordChangeDto;
 import drzazga.daniel.geodezja.Dtos.UserRegistrationDto;
 import drzazga.daniel.geodezja.model.Role;
 import drzazga.daniel.geodezja.model.User;
@@ -44,14 +45,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserPasswordChangeDto findByEmailPassChanger(String email) {
+        return mapperFacade.map(userRepository.findByEmail(email), UserPasswordChangeDto.class);
+    }
+
+    @Override
     public void saveUser(UserRegistrationDto userRegistrationDto) {
         User user = mapperFacade.map(userRegistrationDto, User.class);
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
         user.setActive(1);
 
-        Role role = roleRepository.findByRole("ROLE_ADMIN");
-        user.setRoles(new HashSet<>(Arrays.asList(role)));
+        Role role = roleRepository.findByRole("ROLE_USER");
+        user.setRoles(new HashSet<Role>(Arrays.asList(role)));
 
         userRepository.save(user);
     }
+
+    @Override
+    public void updateUserPassword(String newPassword, String email) {
+        userRepository.updateUserPassword(passwordEncoder.encode(newPassword), email);
+    }
+
+
 }
