@@ -2,7 +2,6 @@ package drzazga.daniel.geodezja.model;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -10,28 +9,23 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
     @Column(name = "email")
-    @NotNull
     private String email;
 
     @Column(name = "password")
-    @NotNull
     private String password;
 
     @Column(name = "first_name")
-    @NotNull
     private String firstName;
 
     @Column(name = "last_name")
-    @NotNull
     private String lastName;
 
     @Column(name = "active")
-    @NotNull
     private Integer active;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -57,6 +51,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
