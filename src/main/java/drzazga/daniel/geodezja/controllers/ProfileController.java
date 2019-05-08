@@ -1,5 +1,6 @@
 package drzazga.daniel.geodezja.controllers;
 
+import drzazga.daniel.geodezja.Dtos.UserDto;
 import drzazga.daniel.geodezja.Dtos.UserPasswordChangeDto;
 import drzazga.daniel.geodezja.services.UserService;
 import drzazga.daniel.geodezja.utilities.UserUtilities;
@@ -50,10 +51,36 @@ public class ProfileController {
                                      Model model,
                                      Locale locale) {
 
-        if(!result.hasErrors()){
+        if (!result.hasErrors()) {
             userService.updateUserPassword(userPasswordChangeDto.getPassword(), userPasswordChangeDto.getEmail());
             model.addAttribute("message", messageSource.getMessage("passwordChange.success", null, locale));
         }
         return "editpassword";
+    }
+
+    @GetMapping("/editprofil")
+    public String changeUserData(Model model) {
+        String username = UserUtilities.getLoggedUser();
+
+        model.addAttribute("user", userService.findByEmail(username));
+        return "editprofil";
+    }
+
+    @PostMapping("/updateprofil")
+    public String changeUserDataAction(@Valid @ModelAttribute("user") UserDto userDto,
+                                       BindingResult result,
+                                       Model model,
+                                       Locale locale) {
+
+        if (!result.hasErrors()) {
+            userService.updateUserProfile(userDto.getFirstName(),
+                    userDto.getLastName(),
+                    userDto.getEmail(),
+                    userDto.getId());
+            model.addAttribute("message", messageSource.getMessage("profilEdit.success", null, locale));
+            model.addAttribute("user",null);
+            return "afteredit";
+        }
+        return "editprofil";
     }
 }

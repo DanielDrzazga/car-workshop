@@ -16,5 +16,5 @@ public interface UserService {
 
     void updateUserPassword(String newPassword, String email);
 
-
+    void updateUserProfile(String newName, String newLastName, String newEmail, Long id);
 }
