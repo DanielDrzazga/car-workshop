@@ -1,8 +1,10 @@
 package drzazga.daniel.geodezja.controllers;
 
+import drzazga.daniel.geodezja.Dtos.UserFileDto;
 import drzazga.daniel.geodezja.Dtos.UserUpdateDto;
 import drzazga.daniel.geodezja.model.User;
 import drzazga.daniel.geodezja.services.AdminService;
+import drzazga.daniel.geodezja.utilities.UserUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -11,7 +13,12 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -21,7 +28,7 @@ import java.util.Map;
 @Secured({"ROLE_ADMIN"})
 public class AdminPageController {
 
-    private final Integer ELEMENTS = 3;
+    private final Integer ELEMENTS = 10;
     private final AdminService adminService;
     private final MessageSource messageSource;
 
@@ -77,7 +84,7 @@ public class AdminPageController {
     @GetMapping(value = "/admin/users/search/{searchWord}/{page}")
     public String openSearchUsersPage(@PathVariable("searchWord") String searchWord,
                                       @PathVariable("page") int page, Model model) {
-        Page<User> pages = getAllUsersPageable(page - 1, true, searchWord);
+        Page<User> pages = adminService.findAllSearch(searchWord, PageRequest.of(page-1, ELEMENTS));
         int totalPages = pages.getTotalPages();
         int currentPage = pages.getNumber();
         List<User> userList = pages.getContent();
@@ -92,14 +99,32 @@ public class AdminPageController {
         return "admin/usersearch";
     }
 
-    private Page<User> getAllUsersPageable(int page, boolean search, String param) {
-        Page<User> pages;
-        if (!search) {
-            pages = adminService.findAll(PageRequest.of(page, ELEMENTS));
-        } else {
-            pages = adminService.findAllSearch(param, PageRequest.of(page, ELEMENTS));
+    @GetMapping("/admin/users/importusers")
+    public String showUploadPageFromXML(Model model) {
+        return "admin/importusers";
+    }
+
+    @PostMapping("/admin/users/upload")
+    public String importUsersFromXML(@RequestParam("filename") MultipartFile mFile) {
+
+        String uploadDir = System.getProperty("user.dir") + "/uploads";
+        File file;
+        try {
+            file = new File(uploadDir);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            Path fileAndPath = Paths.get(uploadDir, mFile.getOriginalFilename());
+            Files.write(fileAndPath, mFile.getBytes());
+            file = new File(fileAndPath.toString());
+            List<UserFileDto> userList = UserUtilities.usersDataLoader(file);
+            //adminService.insertInBatch(userList);
+            adminService.saveAll(userList);
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return pages;
+        return "redirect:/admin/users/1";
     }
 
     private Map<Integer, String> prepareRoleMap() {
