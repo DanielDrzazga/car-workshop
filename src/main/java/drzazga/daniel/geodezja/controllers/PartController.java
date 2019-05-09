@@ -1,9 +1,8 @@
 package drzazga.daniel.geodezja.controllers;
 
 import drzazga.daniel.geodezja.Dtos.PartDto;
-import drzazga.daniel.geodezja.Dtos.UserUpdateDto;
 import drzazga.daniel.geodezja.model.Part;
-import drzazga.daniel.geodezja.model.User;
+import drzazga.daniel.geodezja.services.PartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -69,7 +68,7 @@ public class PartController {
     @GetMapping(value = "/employee/parts/search/{searchWord}/{page}")
     public String openSearchUsersPage(@PathVariable("searchWord") String searchWord,
                                       @PathVariable("page") int page, Model model) {
-        Page<Part> partPage = partService.findAllSearcg(searchWord,PageRequest.of(page-1,ELEMENTS));
+        Page<Part> partPage = partService.findAllSearch(searchWord,PageRequest.of(page-1,ELEMENTS));
         int totalPages = partPage.getTotalPages();
         int currentPage = partPage.getNumber();
 
@@ -79,8 +78,14 @@ public class PartController {
         model.addAttribute("currentPage", currentPage + 1);
         model.addAttribute("recordStartCounter", currentPage * ELEMENTS);
         model.addAttribute("searchWord", searchWord);
-        model.addAttribute("userList", userList);
+        model.addAttribute("partList", partPage);
 
-        return "employee/partsearch";
+        return "employee/partssearch";
+    }
+
+    @GetMapping("/employee/parts/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
+        partService.deletePartById(id);
+        return "redirect:/employee/parts/1";
     }
 }
