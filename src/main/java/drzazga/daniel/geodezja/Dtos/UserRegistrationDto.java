@@ -23,6 +23,8 @@ public class UserRegistrationDto {
     @NotBlank(message = "{error.userLastName.empty}")
     private String lastName;
 
+    private String activationCode;
+
     public UserRegistrationDto() {
     }
 
@@ -56,5 +58,13 @@ public class UserRegistrationDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 }
