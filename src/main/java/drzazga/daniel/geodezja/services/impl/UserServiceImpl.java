@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserRegistrationDto userRegistrationDto) {
         User user = mapperFacade.map(userRegistrationDto, User.class);
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        user.setActive(1);
+        user.setActive(0);
 
         Role role = roleRepository.findByRole("ROLE_USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(role)));
@@ -69,6 +69,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserProfile(String newName, String newLastName, String newEmail, Long id) {
         userRepository.updateUserProfile(newName, newLastName, newEmail, id);
+    }
+
+    @Override
+    public void updateUserActivation(int activeCode, String activationCode) {
+        userRepository.updateActivation(activeCode, activationCode);
     }
 
 }

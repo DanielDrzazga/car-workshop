@@ -77,4 +77,8 @@ public class AdminServiceImpl implements AdminService {
         userRepository.saveAll(users);
     }
 
+    @Override
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
 }

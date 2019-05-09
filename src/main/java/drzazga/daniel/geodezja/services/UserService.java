@@ -18,4 +18,6 @@ public interface UserService {
 
     void updateUserProfile(String newName, String newLastName, String newEmail, Long id);
 
+    void updateUserActivation(int activeCode, String activationCode);
+
 }
