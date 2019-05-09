@@ -1,18 +1,18 @@
 package drzazga.daniel.geodezja.Dtos;
 
 public class RoleDto {
-    private Long Id;
+    private Long id;
     private String role;
 
     public RoleDto() {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getRole() {
