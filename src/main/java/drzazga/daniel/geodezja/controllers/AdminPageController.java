@@ -118,12 +118,17 @@ public class AdminPageController {
             Files.write(fileAndPath, mFile.getBytes());
             file = new File(fileAndPath.toString());
             List<UserFileDto> userList = UserUtilities.usersDataLoader(file);
-            //adminService.insertInBatch(userList);
             adminService.saveAll(userList);
             file.delete();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "redirect:/admin/users/1";
+    }
+
+    @GetMapping("/admin/users/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
+        adminService.deleteUserById(id);
         return "redirect:/admin/users/1";
     }
 

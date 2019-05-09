@@ -22,4 +22,6 @@ public interface AdminService {
     Page<User> findAllSearch(String param, Pageable pageable);
 
     void saveAll(List<UserFileDto> userList);
+
+    void deleteUserById(Long id);
 }
