@@ -1,5 +1,7 @@
 package drzazga.daniel.geodezja.Dtos;
 
+import drzazga.daniel.geodezja.annotations.PriceIsNumber;
+
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
@@ -10,6 +12,7 @@ public class PartDto {
     @NotBlank(message = "{error.partName.empty}")
     private String name;
 
+    @PriceIsNumber
     @NotBlank(message = "{error.partPrice.empty}")
     private BigDecimal price;
 
