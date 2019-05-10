@@ -4,6 +4,8 @@ import drzazga.daniel.geodezja.Dtos.UserDto;
 import drzazga.daniel.geodezja.Dtos.UserPasswordChangeDto;
 import drzazga.daniel.geodezja.Dtos.UserRegistrationDto;
 
+import java.util.List;
+
 public interface UserService {
 
     boolean isEmailExist(String email);
@@ -20,4 +22,5 @@ public interface UserService {
 
     void updateUserActivation(int activeCode, String activationCode);
 
+    List<UserDto> findAllCustomers();
 }

@@ -41,10 +41,6 @@ public class RegisterController {
                                  Model model,
                                  Locale locale){
 
-        if(userService.isEmailExist(userRegistrationDto.getEmail())){
-            result.rejectValue("email","error.userEmailExist");
-        }
-
         if(!result.hasErrors()){
             userRegistrationDto.setActivationCode(UserUtilities.randomStringGenerator());
 

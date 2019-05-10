@@ -37,4 +37,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User u SET u.active = :activeParam WHERE u.activationCode = :activationCode")
     void updateActivation(@Param("activeParam") int activeParam, @Param("activationCode") String activationCode);
+
 }
