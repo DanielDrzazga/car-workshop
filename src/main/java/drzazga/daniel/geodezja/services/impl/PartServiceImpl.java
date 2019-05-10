@@ -34,7 +34,6 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public void updatePart(PartDto partDto) {
-//        partRepository.updateNameAndPricePart(id,name,price);
         partRepository.save(mapperFacade.map(partDto,Part.class));
     }
 

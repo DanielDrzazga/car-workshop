@@ -3,6 +3,8 @@ package drzazga.daniel.geodezja.controllers;
 import drzazga.daniel.geodezja.Dtos.PartDto;
 import drzazga.daniel.geodezja.model.Part;
 import drzazga.daniel.geodezja.services.PartService;
+import drzazga.daniel.geodezja.services.UserService;
+import drzazga.daniel.geodezja.utilities.UserUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -26,22 +28,24 @@ public class PartController {
 
     private final Integer ELEMENTS = 10;
     private final PartService partService;
+    private final UserService userService;
     private final MessageSource messageSource;
 
     @Autowired
-    public PartController(PartService partService, MessageSource messageSource) {
+    public PartController(PartService partService, UserService userService, MessageSource messageSource) {
         this.partService = partService;
+        this.userService = userService;
         this.messageSource = messageSource;
     }
 
     @GetMapping("/addpart")
-    public String registerForm(Model model) {
+    public String partForm(Model model) {
         model.addAttribute("part", new PartDto());
-        return "employee/addpart";
+        return "part/addpart";
     }
 
     @PostMapping("/addpart")
-    public String registerAction(@Valid @ModelAttribute("part") PartDto partDto,
+    public String partAction(@Valid @ModelAttribute("part") PartDto partDto,
                                  BindingResult result,
                                  Model model,
                                  Locale locale) {
@@ -49,14 +53,12 @@ public class PartController {
         if (!result.hasErrors()) {
             partService.savePart(partDto);
             model.addAttribute("message", messageSource.getMessage("parts.success", null, locale));
-            return "redirect:/employee/parts/1";
+            return "redirect:/parts/1";
         }
-
-        return "employee/addpart";
-
+        return "part/addpart";
     }
 
-    @GetMapping("/employee/parts/{page}")
+    @GetMapping("/parts/{page}")
     public String openAllPartsPage(@PathVariable("page") int page, Model model) {
         Page<Part> partPage = partService.findAll(PageRequest.of(page - 1, ELEMENTS));
         int totalPages = partPage.getTotalPages();
@@ -64,30 +66,32 @@ public class PartController {
 
         List<Part> partList = partPage.getContent();
 
+        String loggedUser = UserUtilities.getLoggedUser();
+        Long role = userService.findByEmail(loggedUser).getRolesDto().iterator().next().getId();
+
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", currentPage + 1);
         model.addAttribute("partList", partList);
         model.addAttribute("recordStartCounter", currentPage * ELEMENTS);
-        return "employee/parts";
+        model.addAttribute("role",role);
+        return "part/parts";
     }
 
-    @GetMapping("/employee/parts/edit/{id}")
+    @GetMapping("/parts/edit/{id}")
     public String getPartToEdit(@PathVariable("id") Long id, Model model) {
         PartDto partDto = partService.findById(id);
         model.addAttribute("part", partDto);
-        return "employee/partedit";
+        return "part/partedit";
     }
 
-    @PostMapping("/employee/updatepart/{id}")
+    @PostMapping("/parts/updatepart/{id}")
     public String updatePart(@PathVariable("id") Long id,
                              @ModelAttribute PartDto partDto) {
-//        String name = partDto.getName();
-//        BigDecimal price = partDto.getPrice();
         partService.updatePart(partDto);
-        return "redirect:/employee/parts/1";
+        return "redirect:/parts/1";
     }
 
-    @GetMapping(value = "/employee/parts/search/{searchWord}/{page}")
+    @GetMapping(value = "/parts/search/{searchWord}/{page}")
     public String openSearchPartsPage(@PathVariable("searchWord") String searchWord,
                                       @PathVariable("page") int page, Model model) {
         Page<Part> partPage = partService.findAllSearch(searchWord, PageRequest.of(page - 1, ELEMENTS));
@@ -96,18 +100,21 @@ public class PartController {
 
         List<Part> partList = partPage.getContent();
 
+        String loggedUser = UserUtilities.getLoggedUser();
+        Long role = userService.findByEmail(loggedUser).getRolesDto().iterator().next().getId();
+
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", currentPage + 1);
         model.addAttribute("recordStartCounter", currentPage * ELEMENTS);
         model.addAttribute("searchWord", searchWord);
         model.addAttribute("partList", partList);
-
-        return "employee/partssearch";
+        model.addAttribute("role",role);
+        return "part/partssearch";
     }
 
-    @GetMapping("/employee/parts/delete/{id}")
+    @GetMapping("/parts/delete/{id}")
     public String deletePart(@PathVariable("id") Long id) {
         partService.deletePartById(id);
-        return "redirect:/employee/parts/1";
+        return "redirect:/parts/1";
     }
 }

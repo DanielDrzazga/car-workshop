@@ -137,6 +137,7 @@ public class AdminPageController {
         Map<Integer, String> roleMap = new HashMap<>();
         roleMap.put(1, messageSource.getMessage("word.admin", null, locale));
         roleMap.put(2, messageSource.getMessage("word.user", null, locale));
+        roleMap.put(3, messageSource.getMessage("word.employee",null,locale));
         return roleMap;
     }
 
