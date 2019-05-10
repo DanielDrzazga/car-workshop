@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Controller
-@Secured({"ROLE_ADMIN"})
+@Secured({"ROLE_ADMIN","ROLE_EMPLOYEE"})
 public class PartController {
 
     private final Integer ELEMENTS = 10;
