@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
 @Service
 public class PartServiceImpl implements PartService {
 
@@ -35,8 +33,9 @@ public class PartServiceImpl implements PartService {
     }
 
     @Override
-    public void updatePart(Long id, String name, BigDecimal price) {
-        partRepository.updateNameAndPricePart(id,name,price);
+    public void updatePart(PartDto partDto) {
+//        partRepository.updateNameAndPricePart(id,name,price);
+        partRepository.save(mapperFacade.map(partDto,Part.class));
     }
 
     @Override
@@ -47,6 +46,11 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public void deletePartById(Long id) {
-        deletePartById(id);
+        partRepository.deleteById(id);
+    }
+
+    @Override
+    public void savePart(PartDto partDto) {
+        partRepository.save(mapperFacade.map(partDto, Part.class));
     }
 }

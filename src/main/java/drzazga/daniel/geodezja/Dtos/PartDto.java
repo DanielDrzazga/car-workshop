@@ -3,28 +3,31 @@ package drzazga.daniel.geodezja.Dtos;
 import drzazga.daniel.geodezja.annotations.PriceIsNumber;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class PartDto {
 
-    private Long ig;
+    private Long id;
 
     @NotBlank(message = "{error.partName.empty}")
     private String name;
 
+    //TODO
+    // nie działają validacje(null), zapisuje jak luczba jest z kropką
     @PriceIsNumber
-    @NotBlank(message = "{error.partPrice.empty}")
+    @NotNull(message = "{error.partPrice.empty}")
     private BigDecimal price;
 
     public PartDto() {
     }
 
-    public Long getIg() {
-        return ig;
+    public Long getId() {
+        return id;
     }
 
-    public void setIg(Long ig) {
-        this.ig = ig;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
